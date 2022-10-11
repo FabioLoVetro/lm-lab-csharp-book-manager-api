@@ -58,8 +58,7 @@ public class BookManagerControllerTests
     {
         //Arrange
         long existingBookId = 3;
-        Book existingBookFound = GetTestBooks()
-            .FirstOrDefault(b => b.Id.Equals(existingBookId));
+        Book existingBookFound = GetTestBooks().FirstOrDefault(b => b.Id.Equals(existingBookId));
 
         var bookUpdates = new Book() { Id = 3, Title = "Book Three", Description = "I am updating this for Book Three", Author = "Person Three", Genre = Genre.Education };
 
@@ -87,6 +86,23 @@ public class BookManagerControllerTests
         result.Should().BeOfType(typeof(ActionResult<Book>));
     }
 
+    [Test]
+    public void DeleteBookById_Returns_CorrectBook()
+    {
+        //Arrange
+        long existingBookId = 5;
+        Book existingBookFound = GetTestBooks().FirstOrDefault(b => b.Id.Equals(existingBookId));
+
+        _mockBookManagementService.Setup(b => b.FindBookById(existingBookId)).Returns(existingBookFound);
+
+        //Act
+        var result = _controller.DeleteBookById(existingBookId);
+
+        //Assert
+        result.Should().BeOfType(typeof(ActionResult<Book>));
+        result.Value.Should().Be(existingBookFound);
+    }
+
     private static List<Book> GetTestBooks()
     {
         return new List<Book>
@@ -94,6 +110,7 @@ public class BookManagerControllerTests
             new Book() { Id = 1, Title = "Book One", Description = "This is the description for Book One", Author = "Person One", Genre = Genre.Education },
             new Book() { Id = 2, Title = "Book Two", Description = "This is the description for Book Two", Author = "Person Two", Genre = Genre.Fantasy },
             new Book() { Id = 3, Title = "Book Three", Description = "This is the description for Book Three", Author = "Person Three", Genre = Genre.Thriller },
+            new Book() { Id = 5, Title = "Book Five", Description = "This is the description for Book Five", Author = "Person Five", Genre = Genre.Fantasy }
         };
     }
 }
