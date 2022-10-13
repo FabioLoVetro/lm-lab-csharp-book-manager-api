@@ -1,5 +1,9 @@
 ﻿namespace BookManagerApi.Models
 {
+	/// <summary>
+	/// Class Book.
+	/// Rapresent a book
+	/// </summary>
 	public class Book
 	{
 		public long Id { get; set; }
